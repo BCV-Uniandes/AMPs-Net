@@ -7,7 +7,7 @@ import csv
 import json
 from modlamp.descriptors import GlobalDescriptor, PeptideDescriptor
 import argparse
-import __init__
+
 
 def read_file_infe(name_file):
     All_data = {"Sequence": []}

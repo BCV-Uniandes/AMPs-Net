@@ -25,7 +25,7 @@ class ArgsInit(object):
         parser.add_argument('--use_gpu', action='store_true')
         parser.add_argument('--device', type=int, default=0,
                             help='which gpu to use if any (default: 0)')
-        parser.add_argument('--epochs', type=int, default=160,
+        parser.add_argument('--epochs', type=int, default=300,
                             help='number of epochs to train (default: 300)')
         parser.add_argument('--lr', type=float, default=5e-4,
                             help='learning rate set for optimizer.')

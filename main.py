@@ -8,11 +8,12 @@ from utils.ckpt_util import save_ckpt
 import logging
 import time
 from dataset.dataset import load_dataset, AMPsDataset
-import metrics_pharma
 import torch.nn.functional as F
 import numpy as np
 import os
 import torch.optim as optim
+time.sleep(3)
+from utils import metrics_pharma
 import sys
 
 
@@ -153,8 +154,8 @@ def make_weights_for_balanced_classes(data, nclasses):
 
 def main():
     # Load arguments
-    args = ArgsInit().save_exp()
 
+    args = ArgsInit().save_exp()
     if args.use_gpu:
         device = (
             torch.device("cuda:" + str(args.device))
