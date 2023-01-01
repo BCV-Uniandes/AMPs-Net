@@ -8,6 +8,7 @@ import copy
 import numpy as np
 import torch.nn.functional as F
 import pandas as pd
+import os
 
 
 @torch.no_grad()
@@ -26,15 +27,12 @@ def eval(model, device, loader, num_classes, args, target=None):
     print("------Copying model 4---------")
     prop_predictor4 = copy.deepcopy(model)
 
-    test_model_path = (
-        "./log/"
-        + args.save
-    )
+    test_model_path = "./log/" + args.save
 
-    test_model_path1 = test_model_path+'/Fold1/model_ckpt/Checkpoint.pth'
-    test_model_path2 = test_model_path+'/Fold2/model_ckpt/Checkpoint.pth'
-    test_model_path3 = test_model_path+'/Fold3/model_ckpt/Checkpoint.pth'
-    test_model_path4 = test_model_path+'/Fold4/model_ckpt/Checkpoint.pth'
+    test_model_path1 = test_model_path + "/Fold1/model_ckpt/Checkpoint.pth"
+    test_model_path2 = test_model_path + "/Fold2/model_ckpt/Checkpoint.pth"
+    test_model_path3 = test_model_path + "/Fold3/model_ckpt/Checkpoint.pth"
+    test_model_path4 = test_model_path + "/Fold4/model_ckpt/Checkpoint.pth"
 
     # LOAD MODELS
     print("------- Loading weights----------")
@@ -121,7 +119,6 @@ def main():
         torch.cuda.manual_seed(args.seed)
     print(args)
 
-
     test_dataset = AMPsDataset(
         partition="Inference",
         cross_val=None,
@@ -167,9 +164,13 @@ def main():
     inference_results = pd.DataFrame.from_dict(save_item)
 
     if args.binary:
-        path_results = "./Inference/AMPs/" + args.file_infe
+        saving_dir = "./Inference/AMPs/"
     elif args.multilabel:
-        path_results = "./Inference/MultiLabel/" + args.file_infe
+        saving_dir = "./Inference/MultiLabel/"
+
+    if not os.path.exists(saving_dir):
+        os.makedirs(saving_dir, exist_ok=True)
+    path_results = saving_dir + args.file_infe
     inference_results.to_csv(path_results, index=False)
 
 
