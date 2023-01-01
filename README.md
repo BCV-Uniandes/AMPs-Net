@@ -29,6 +29,7 @@ $ bash amps_env.sh
 
 ## Models
 We provide trained models available for download in the following [link](http://157.253.243.19/AMPs-Net/).
+Last update on the models on the 01/01/2023.
 
 ## Usage
 To train each of the components of our method: please refer to run_AMP.sh and run_multilabel.sh.
