@@ -1,12 +1,12 @@
 # conda create a new environment
 # make sure system cuda version is the same with pytorch cuda
 # follow the instruction of Pyotrch Geometric: https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html
-export PATH=/usr/local/cuda-10.1/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64:$LD_LIBRARY_PATH
+# export PATH=/usr/local/cuda-10.1/bin:$PATH
+# export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64:$LD_LIBRARY_PATH
 
-conda create --name amps_env 
+# conda create --name amps_env 
 # activate this enviroment
-conda activate amps_env
+# conda activate amps_env
 
 conda install pytorch torchvision torchaudio cudatoolkit=11.6 -c pytorch -c conda-forge
 # test if pytorch is installed successfully

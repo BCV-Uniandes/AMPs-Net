@@ -1,11 +1,10 @@
 import torch
-import __init__
 import torch.nn.functional as F
 from torch_geometric.nn import global_add_pool, global_mean_pool, global_max_pool
-from ogb.graphproppred.mol_encoder import AtomEncoder, BondEncoder
 from gcn_lib.sparse.torch_vertex import GENConv
 from gcn_lib.sparse.torch_nn import norm_layer, MLP, MM_AtomEncoder, MM_BondEncoder 
 import logging
+from model.model_encoder import AtomEncoder, BondEncoder
 
 
 class DeeperGCN(torch.nn.Module):

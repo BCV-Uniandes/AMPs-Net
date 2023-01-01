@@ -8,12 +8,14 @@ from utils.ckpt_util import save_ckpt
 import logging
 import time
 from dataset.dataset import load_dataset, AMPsDataset
-import metrics_pharma
 import torch.nn.functional as F
 import numpy as np 
 import os 
 import torch.optim as optim
 import csv
+time.sleep(3)
+from utils import metrics_pharma
+
 
 
 def train(model, device, loader, optimizer, num_classes,args):
