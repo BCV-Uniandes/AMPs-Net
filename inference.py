@@ -31,16 +31,10 @@ def eval(model, device, loader, num_classes, args, target=None):
         + args.save
     )
 
-    # test_model_path1 = test_model_path+'/Fold1/model_ckpt/Checkpoint__valid_best.pth'
-    # test_model_path2 = test_model_path+'/Fold2/model_ckpt/Checkpoint__valid_best.pth'
-    # test_model_path3 = test_model_path+'/Fold3/model_ckpt/Checkpoint__valid_best.pth'
-    # test_model_path4 = test_model_path+'/Fold4/model_ckpt/Checkpoint__valid_best.pth'
-
-    test_model_path1 = '/media/SSD5/pruiz/pretrained_models/BINARY_AMPs/Fold1/model_ckpt/Checkpoint.pth'
-    test_model_path2 = '/media/SSD5/pruiz/pretrained_models/BINARY_AMPs/Fold2/model_ckpt/Checkpoint.pth'
-    test_model_path3 = '/media/SSD5/pruiz/pretrained_models/BINARY_AMPs/Fold3/model_ckpt/Checkpoint.pth'
-    test_model_path4 = '/media/SSD5/pruiz/pretrained_models/BINARY_AMPs/Fold4/model_ckpt/Checkpoint.pth'
-
+    test_model_path1 = test_model_path+'/Fold1/model_ckpt/Checkpoint.pth'
+    test_model_path2 = test_model_path+'/Fold2/model_ckpt/Checkpoint.pth'
+    test_model_path3 = test_model_path+'/Fold3/model_ckpt/Checkpoint.pth'
+    test_model_path4 = test_model_path+'/Fold4/model_ckpt/Checkpoint.pth'
 
     # LOAD MODELS
     print("------- Loading weights----------")
