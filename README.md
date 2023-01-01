@@ -38,7 +38,7 @@ To perform inference on your data please refer to: run_inference_AMP.sh and run_
 
 **To setup your data on the proper format for our models please refer to generate_metadata.sh. Your dataset should be a csv file with a column name Sequence and your peptides in their AA sequence. Follow the example in data/datasets/Inference.**
 
-To perform inference with the pre-trained models please modify L34-37 from inference.py. (Change Checkpoint__valid_best.pth to Checkpoint.pth)
+To perform inference with your models please modify L34-37 from inference.py. (Change Checkpoint.pth to Checkpoint__valid_best.pth)
 
 ## Citation
 
