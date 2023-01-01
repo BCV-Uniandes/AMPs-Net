@@ -71,17 +71,22 @@ def eval(model, device, loader, num_classes, args, target=None):
             pass
         else:
             with torch.set_grad_enabled(False):
+
                 pred_logits1 = prop_predictor1(batch)
-                pred_logits1 = F.softmax(pred_logits1, dim=1)
-
                 pred_logits2 = prop_predictor2(batch)
-                pred_logits2 = F.softmax(pred_logits2, dim=1)
-
                 pred_logits3 = prop_predictor3(batch)
-                pred_logits3 = F.softmax(pred_logits3, dim=1)
-
                 pred_logits4 = prop_predictor4(batch)
-                pred_logits4 = F.softmax(pred_logits4, dim=1)
+
+                if args.multilabel:
+                    pred_logits1 = F.sigmoid(pred_logits1)
+                    pred_logits2 = F.sigmoid(pred_logits2)
+                    pred_logits3 = F.sigmoid(pred_logits3)
+                    pred_logits4 = F.sigmoid(pred_logits4)
+                else:
+                    pred_logits1 = F.softmax(pred_logits1, dim=1)
+                    pred_logits2 = F.softmax(pred_logits2, dim=1)
+                    pred_logits3 = F.softmax(pred_logits3, dim=1)
+                    pred_logits4 = F.softmax(pred_logits4, dim=1)
 
                 pred_logits = (
                     pred_logits1 + pred_logits2 + pred_logits3 + pred_logits4
