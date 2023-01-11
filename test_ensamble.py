@@ -5,7 +5,7 @@ from model.model import DeeperGCN
 from tqdm import tqdm
 from args import ArgsInit
 from dataset.dataset import AMPsDataset
-import metrics_pharma
+from utils import metrics_pharma
 import copy
 import numpy as np 
 import datetime

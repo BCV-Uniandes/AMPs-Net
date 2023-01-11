@@ -1,14 +1,20 @@
 import torch
 from torch_geometric.data import DataLoader
 import torch.optim as optim
-from model import DeeperGCN
+from model.model import DeeperGCN
 from tqdm import tqdm
 from args import ArgsInit
-from dataset import AMPsDataset
+from utils.ckpt_util import save_ckpt
+import logging
+import time
+import statistics
+from ogb.graphproppred import PygGraphPropPredDataset, Evaluator
+from dataset.dataset import load_dataset, AMPsDataset
 import torch.nn.functional as F
-import metrics_pharma
+from utils import metrics_pharma
 import copy
 import numpy as np 
+import datetime
 import os 
 import csv 
 
@@ -56,9 +62,9 @@ def eval(model, device, loader, num_classes, cross_val, args):
                 y_true.append(batch_mol.y.view(batch_mol.y.shape).detach().cpu())
                 y_pred.append(pred.detach().cpu())
                 
+    
     y_true = torch.cat(y_true, dim=0).numpy()
     y_pred = torch.cat(y_pred, dim=0).numpy()
-
     if args.binary:
         auc = metrics_pharma.plotbinauc(y_pred, y_true)
         nap, f = metrics_pharma.pltmap_bin(y_pred,y_true)     
@@ -78,7 +84,7 @@ def main():
         
     if args.binary:
         args.nclasses = 2
- 
+
     #Numpy and torch seeds
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -91,14 +97,14 @@ def main():
     for cross_val in range(1,5):
         
         
-        test_dataset = AMPsDataset(partition='Test', cross_val=cross_val, binary_task=args.binary,args=args)
+        train_dataset = AMPsDataset(partition='Train', cross_val=cross_val, binary_task=args.binary, args=args)
         
-        test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True,
+        valid_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True,
                                 num_workers=args.num_workers)
 
 
         model = DeeperGCN(args).to(device)
-        maps.append(eval(model, device, test_loader, args.nclasses, cross_val, args))
+        maps.append(eval(model, device, valid_loader, args.nclasses, cross_val, args))
 
     map1, map2, map3, map4 = maps
     save_items = {'Mean': [], 'Fold1': [], 'Fold2': [], 'Fold3': [], 'Fold4': []}
@@ -115,7 +121,7 @@ def main():
 
     fieldnames = list(save_items.keys())
     
-    csv_file = os.path.join('./log/',args.save,'Test.csv')
+    csv_file = os.path.join('./log/',args.save,'Train.csv')
 
     with open(csv_file, 'a+') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames= fieldnames)
@@ -129,5 +135,7 @@ def main():
            'Fold3': map3,
            'Fold4': map4})
     
+
+
 if __name__ == "__main__":
     main()
