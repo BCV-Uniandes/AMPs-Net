@@ -28,7 +28,8 @@ $ bash amps_env.sh
 ```
 
 ## Models
-We provide trained models available for download in the following [link](http://157.253.243.19/AMPs-Net/).
+We provide pretrained models available for download in the following [link](http://157.253.243.19/AMPs-Net/).
+Last update on the models on the 01/01/2023.
 
 ## Usage
 To train each of the components of our method: please refer to run_AMP.sh and run_multilabel.sh.
@@ -37,7 +38,7 @@ To perform inference on your data please refer to: run_inference_AMP.sh and run_
 
 **To setup your data on the proper format for our models please refer to generate_metadata.sh. Your dataset should be a csv file with a column name Sequence and your peptides in their AA sequence. Follow the example in data/datasets/Inference.**
 
-To perform inference with the pre-trained models please modify L34-37 from inference.py. (Change Checkpoint__valid_best.pth to Checkpoint.pth)
+To perform inference with your models please modify L34-37 from inference.py. (Change Checkpoint.pth to Checkpoint__valid_best.pth)
 
 ## Citation
 
