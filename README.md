@@ -28,7 +28,7 @@ $ conda activate amps_env
 $ bash amps_env.sh
 ```
 
-Then you should be able to run the inference using the binary classfication model:
+Then you should be able to run the inference using the binary classification model:
  ```bash
 ./run_inference_AMP.sh  \ 
     -m <model_inference_path> \ 
@@ -38,7 +38,7 @@ Then you should be able to run the inference using the binary classfication mode
     -f <file_name_inference>
 ```
 
-or using the miltilabel model:
+or using the multilabel model:
 
  ```bash
 ./run_inference_multilabel.sh \ 
@@ -52,7 +52,7 @@ or using the miltilabel model:
 Command parameters:
 
 - **model_inference_path**: is the checkpoints model path used for inference, either `checkpoints/BINARY_AMPs` or `checkpoints/MULTILABEL_AMPs`.
-- **batch_size**:  how many samples per batch to load in the torch Dataloader
+- **batch_size**:  how many samples per batch to load in the torch DataLoader
 - **device**: GPU device number to use, usually 0.
 - **num_metadata**: number of metadata features for the graph representation
 
@@ -76,7 +76,7 @@ Please follow these steps:
     cd AMPs-Net
     ```
 
-3. Prepare your inferece files in the `Inference` folder, see the [Usage](#Usage) section.
+3. Prepare your inference files in the `Inference` folder, see the [Usage](#Usage) section.
 
 4. Build the Docker image:
 
@@ -84,7 +84,7 @@ Please follow these steps:
     docker build -t amp-net:latest .
     ```
 
-5. Run inference with the binary classfication model. e.g using the provided `Example.csv` file:
+5. Run inference with the binary classification model. e.g, using the provided `Example.csv` file:
 
     ```bash
     docker run \
@@ -94,7 +94,7 @@ Please follow these steps:
         bash -c "/workspace/run_inference_AMP.sh -m checkpoints/BINARY_AMPs -b 4 -d 0 -n 8 -f Example.csv"
     ```
 
-6. Run infernce with the multilabel model. e.g using the provided `Example.csv` file:
+6. Run inference with the multilabel model. e.g, using the provided `Example.csv` file:
 
     ```bash
     docker run \
