@@ -15,7 +15,8 @@ Membranes MDPI, 2022.<br><br>
 <sup>3 </sup> Grupo de Diseño de Productos y Procesos (GDPP), Department of Chemical and Food Engineering, Universidad de los Andes, Bogota 111711, Colombia.<br/>
 
 ## Installation
-The following steps are required in order to run AMPs-Net:<br />
+
+The following steps are required in order to run AMPs-Net using a local Conda environment:<br />
 
 ```bash
 $ export PATH=/usr/local/cuda-11.0/bin:$PATH 
@@ -26,6 +27,84 @@ $ conda activate amps_env
 
 $ bash amps_env.sh
 ```
+
+Then you should be able to run the inference using the binary classfication model:
+ ```bash
+./run_inference_AMP.sh  \ 
+    -m <model_inference_path> \ 
+    -b <batch_size> \ 
+    -d <device> \ 
+    -n <num_metadata> \ 
+    -f <file_name_inference>
+```
+
+or using the miltilabel model:
+
+ ```bash
+./run_inference_multilabel.sh \ 
+    -m <model_inference_path> \ 
+    -b <batch_size> \ 
+    -d <device> \ 
+    -n <num_metadata> \ 
+    -f <file_name_inference>
+```
+
+Command parameters:
+
+- **model_inference_path**: is the checkpoints model path used for inference, either `checkpoints/BINARY_AMPs` or `checkpoints/MULTILABEL_AMPs`.
+- **batch_size**:  how many samples per batch to load in the torch Dataloader
+- **device**: GPU device number to use, usually 0.
+- **num_metadata**: number of metadata features for the graph representation
+
+## Installation with Docker
+
+You will need a machine with a CUDA compatible GPU with the NVIDIA Container Toolkit installed.
+
+Please follow these steps:
+
+1.  Install [Docker](https://www.docker.com/).
+    *   Install
+        [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+        for GPU support.
+    *   Setup running
+        [Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+2.  Clone this repository and `cd` into it.
+
+    ```bash
+    git clone https://github.com/BCV-Uniandes/AMPs-Net
+    cd AMPs-Net
+    ```
+
+3. Prepare your inferece files in the `Inference` folder, see the [Usage](#Usage) section.
+
+4. Build the Docker image:
+
+    ```bash
+    docker build -t amp-net:latest .
+    ```
+
+5. Run inference with the binary classfication model. e.g using the provided `Example.csv` file:
+
+    ```bash
+    docker run \
+        -it --rm --gpus all \
+        -v "$(pwd)":/workspace \
+        amp-net:latest \
+        bash -c "/workspace/run_inference_AMP.sh -m checkpoints/BINARY_AMPs -b 4 -d 0 -n 8 -f Example.csv"
+    ```
+
+6. Run infernce with the multilabel model. e.g using the provided `Example.csv` file:
+
+    ```bash
+    docker run \
+        -it --rm --gpus all \
+        -v "$(pwd)":/workspace \
+        amp-net:latest \
+        bash -c "/workspace/run_inference_multilabel.sh -m checkpoints/MULTILABEL_AMPs -b 4 -d 0 -n 8 -f Example.csv"
+    ```
+
+7. Check the predictions in the `Inference` folder.
 
 ## Models
 We provide pretrained models available for download in the following [link](http://157.253.243.19/AMPs-Net/).
