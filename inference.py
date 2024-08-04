@@ -1,5 +1,5 @@
 import torch
-from torch_geometric.data import DataLoader
+from torch_geometric.loader import DataLoader
 from model.model import DeeperGCN
 from tqdm import tqdm
 from args import ArgsInit
@@ -9,6 +9,19 @@ import numpy as np
 import torch.nn.functional as F
 import pandas as pd
 import os
+
+def get_device(args):
+    if torch.cuda.is_available():
+        device_count = torch.cuda.device_count()
+        if args.device < device_count:
+            device = torch.device(f"cuda:{args.device}")
+        else:
+            print(f"Warning: Specified CUDA device {args.device} is not available. Using device 0 instead.")
+            device = torch.device("cuda:0")
+    else:
+        print("CUDA is not available. Falling back to CPU.")
+        device = torch.device("cpu")
+    return device
 
 
 @torch.no_grad()
@@ -27,7 +40,7 @@ def eval(model, device, loader, num_classes, args, target=None):
     print("------Copying model 4---------")
     prop_predictor4 = copy.deepcopy(model)
 
-    test_model_path = "./log/" + args.save
+    test_model_path = args.save
 
     test_model_path1 = test_model_path + "/Fold1/model_ckpt/Checkpoint.pth"
     test_model_path2 = test_model_path + "/Fold2/model_ckpt/Checkpoint.pth"
@@ -36,16 +49,16 @@ def eval(model, device, loader, num_classes, args, target=None):
 
     # LOAD MODELS
     print("------- Loading weights----------")
-    prop_predictor1.load_state_dict(torch.load(test_model_path1)["model_state_dict"])
+    prop_predictor1.load_state_dict(torch.load(test_model_path1, map_location='cuda:0')["model_state_dict"])
     prop_predictor1.to(device)
 
-    prop_predictor2.load_state_dict(torch.load(test_model_path2)["model_state_dict"])
+    prop_predictor2.load_state_dict(torch.load(test_model_path2, map_location='cuda:0')["model_state_dict"])
     prop_predictor2.to(device)
 
-    prop_predictor3.load_state_dict(torch.load(test_model_path3)["model_state_dict"])
+    prop_predictor3.load_state_dict(torch.load(test_model_path3, map_location='cuda:0')["model_state_dict"])
     prop_predictor3.to(device)
 
-    prop_predictor4.load_state_dict(torch.load(test_model_path4)["model_state_dict"])
+    prop_predictor4.load_state_dict(torch.load(test_model_path4, map_location='cuda:0')["model_state_dict"])
     prop_predictor4.to(device)
 
     # METHOD.EVAL
@@ -101,14 +114,8 @@ def main():
 
     args = ArgsInit().args
 
-    if args.use_gpu:
-        device = (
-            torch.device("cuda:" + str(args.device))
-            if torch.cuda.is_available()
-            else torch.device("cpu")
-        )
-    else:
-        device = torch.device("cpu")
+    device = get_device(args)
+    print(f"Using device: {device}")
 
     if args.binary:
         args.nclasses = 2
@@ -164,9 +171,9 @@ def main():
     inference_results = pd.DataFrame.from_dict(save_item)
 
     if args.binary:
-        saving_dir = "./Inference/AMPs/"
+        saving_dir = "Inference/AMPs/"
     elif args.multilabel:
-        saving_dir = "./Inference/MultiLabel/"
+        saving_dir = "Inference/MultiLabel/"
 
     if not os.path.exists(saving_dir):
         os.makedirs(saving_dir, exist_ok=True)
